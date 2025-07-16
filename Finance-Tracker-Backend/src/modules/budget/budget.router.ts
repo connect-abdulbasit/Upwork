@@ -1,39 +1,33 @@
-import { Router, Request, Response } from 'express';
+import { Router, Response } from 'express';
 import { db, schema } from '../../../database';
 import { eq } from 'drizzle-orm';
 import VerifyUserJWT from '../../middleware/AuthJWT';
 import { AuthenticatedRequest } from '../../types';
+import { createBudget, getUserBudgets } from './budget.service';
 
 const router = Router();
 
 router.post('/', VerifyUserJWT, async (req: AuthenticatedRequest, res: Response): Promise<void> => {
   try {
-    const { name, description, color } = req.body;
+    const { name, amount, period, categoryId, startDate, endDate } = req.body;
     const userId = req.user!.userId;
 
-    const result = await db.insert(schema.categories).values({
-      name,
-      description,
-      color,
-      userId,
-    });
+    const result = await createBudget(userId, { name, amount, period, categoryId, startDate, endDate });
 
-    res.status(201).json({ msg: 'Category created', result });
+    res.status(201).json({ msg: 'Budget created', result });
   } catch (err) {
-    res.status(500).json({ msg: 'Failed to create category' });
+    res.status(500).json({ msg: 'Failed to create budget' });
   }
 });
 
 router.get('/', VerifyUserJWT, async (req: AuthenticatedRequest, res: Response): Promise<void> => {
   try {
     const userId = req.user!.userId;
-    const categories = await db.query.categories.findMany({
-      where: eq(schema.categories.userId, userId),
-    });
+    const budgets = await getUserBudgets(userId);
 
-    res.json(categories);
+    res.json(budgets);
   } catch (err) {
-    res.status(500).json({ msg: 'Failed to fetch categories' });
+    res.status(500).json({ msg: 'Failed to fetch budgets' });
   }
 });
 
