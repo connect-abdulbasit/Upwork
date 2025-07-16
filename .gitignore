@@ -1,0 +1,43 @@
+# Node
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+package-lock.json
+
+# Environment
+.env
+.env.*
+!.env.example
+
+# Logs
+logs
+*.log
+
+# Builds
+dist/
+build/
+out/
+
+# Database
+*.sqlite
+*.sqlite3
+
+# TypeScript
+*.tsbuildinfo
+
+# VS Code
+.vscode/
+*.code-workspace
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Tests
+coverage/
+*.test.ts
+
+# Docker
+docker-compose.override.yml
