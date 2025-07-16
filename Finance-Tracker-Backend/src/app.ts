@@ -15,6 +15,15 @@ app.use(cors({
   credentials: true,
 }));
 
+// Health check endpoint
+app.get('/api/health', (req, res) => {
+  res.status(200).json({ 
+    status: 'OK', 
+    timestamp: new Date().toISOString(),
+    service: 'Finance Tracker API'
+  });
+});
+
 Routes(app);
 
 export default app;
